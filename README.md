@@ -4,6 +4,14 @@ A self-hosted, approval-first Bluesky photo scheduler with AI-assisted captions.
 
 crierbaby is designed for one Bluesky account per deployment. It does not ship with an account, persona, audience, website, or content niche baked in.
 
+<p>
+  <img src="docs/screenshots/home.png" width="180" alt="Home screen with the next scheduled post">
+  <img src="docs/screenshots/queue.png" width="180" alt="Queue of posts to approve">
+  <img src="docs/screenshots/edit-post.png" width="180" alt="Editing a post with alternative AI captions">
+  <img src="docs/screenshots/caption-writer.png" width="180" alt="Caption writer instructions">
+  <img src="docs/screenshots/add.png" width="180" alt="Adding photos and making a one-off post">
+</p>
+
 ## What it does
 
 - Stores queued photo bytes in Cloudflare KV and schedule metadata in D1.
