@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffe45c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="crierbaby">
+<title>crierbaby</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="lock" id="lock">
+  <form class="gate-card" id="unlock">
+    <div class="baby happy" aria-hidden="true"></div>
+    <div class="lock-name">crierbaby</div>
+    <label for="pin">Passcode</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="current-password">
+    <p class="error-note" id="pin-error" role="alert"></p>
+    <button class="btn" style="width:100%;margin-top:8px">Unlock</button>
+    <a class="preview-link" href="?demo=1">Preview with sample data</a>
+    <details class="setup-help" id="setup-help">
+      <summary>Setting up your own copy</summary>
+      <p>Account credentials stay encrypted on the server—not in this page or your browser.</p>
+      <div id="setup-status">Checking configuration…</div>
+      <p>Follow the commands in <code>README.md</code> to connect Cloudflare, Bluesky, and your caption model.</p>
+    </details>
+  </form>
+</div>
+
+<div class="demo-ribbon" id="demo-ribbon" hidden>Portfolio demo · no posts can be published</div>
+
+<header><div class="bar">
+  <div class="brand"><div class="baby cry" id="baby" role="img"></div><span class="logo">crierbaby</span></div>
+</div></header>
+
+<main class="wrap">
+  <section id="home">
+    <div class="card next">
+      <div class="label"><span>Next up</span></div>
+      <div class="carousel" id="carousel"></div>
+    </div>
+    <button class="banner" id="banner"></button>
+    <button class="card stock" id="stock" data-go="photos">
+      <div class="label"><span>Photo stash</span><b id="stock-count"></b><span class="chev" aria-hidden="true">›</span></div>
+      <div class="pipe" id="pipe" role="img"></div>
+      <div class="legend" id="legend"></div>
+    </button>
+  </section>
+
+  <section id="photos" hidden>
+    <div class="subhead"><button class="link" data-go="home">‹ Home</button><h2>Photo stash</h2></div>
+    <p class="muted" id="photos-sub"></p>
+    <div class="pgrid" id="pgrid"></div>
+    <div class="pbar" id="pbar" hidden>
+      <span id="psel"></span>
+      <button class="btn small" data-photos="next">Post next</button>
+      <button class="btn plain small" data-photos="remove">Remove</button>
+    </div>
+  </section>
+
+  <section id="queue" hidden>
+    <div class="seg" role="group" aria-label="Filter">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="need" aria-pressed="false">Needs you<span class="n" id="seg-n"></span></button>
+      <button data-filter="ok" aria-pressed="false">Approved</button>
+    </div>
+    <div class="card" style="padding-top:4px;padding-bottom:4px"><div id="rows"></div></div>
+    <button class="btn full" id="approve-all"></button>
+  </section>
+
+  <section id="add" hidden>
+    <div class="card">
+      <div class="label"><span>Add to stash</span></div>
+      <label class="btn full picker">Choose photos<input type="file" accept="image/*" multiple id="pick-stash"></label>
+      <div class="staged" id="staged"></div>
+      <button class="btn plain full" id="upload" hidden></button>
+      <div id="up-status" hidden><div class="progress"><i id="bar"></i></div><div class="muted" id="up-text"></div></div>
+    </div>
+    <div class="card">
+      <div class="label"><span>Make a post</span></div>
+      <label class="btn full picker">Choose up to 4 photos<input type="file" accept="image/*" multiple id="pick-post"></label>
+      <div class="staged" id="post-photos"></div>
+      <textarea id="post-cap" placeholder="Your caption" aria-label="Caption" style="margin-top:12px"></textarea>
+      <div class="count" id="post-count">0 / 300</div>
+      <div class="seg when" role="group" aria-label="When">
+        <button data-when="now" aria-pressed="true">Post now</button>
+        <button data-when="day" aria-pressed="false">Pick a day</button>
+      </div>
+      <input type="date" id="post-day" hidden aria-label="Day to post">
+      <button class="btn plain full" id="post-go">Post now</button>
+    </div>
+  </section>
+
+  <section id="agent" hidden>
+    <div class="card stale" id="stale" hidden>
+      <p id="stale-text"></p>
+      <div class="row-btns"><button class="btn small" id="rewrite">Rewrite them</button><button class="btn plain small" id="keep">Keep as is</button></div>
+    </div>
+    <div class="card">
+      <div class="label"><span>Caption writer</span></div>
+      <div class="chat" id="notes"></div>
+      <form class="tell" id="tell-form">
+        <input id="tell" placeholder="Voice, links, caption rules…" aria-label="Tell the caption writer something">
+        <button class="btn small">Tell</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="settings" hidden>
+    <div class="card">
+      <div class="label"><span>Settings</span></div>
+      <div class="set"><div>Auto-posting</div><button class="switch" id="auto" role="switch" aria-checked="false" aria-label="Auto-posting"></button></div>
+      <div class="set"><div>Post times</div><span class="muted">Weekdays 18:00 · Sat 17:00 · Sun 16:00 UTC</span></div>
+    </div>
+  </section>
+</main>
+
+<nav><div class="tabs">
+  <button data-go="home" aria-current="page">Home</button>
+  <button data-go="queue">Queue<span class="badge" id="badge" hidden></span></button>
+  <button data-go="add" aria-label="Add" class="add-tab"><span class="plus">＋</span></button>
+  <button data-go="agent">Agent</button>
+  <button data-go="settings">Settings</button>
+</div></nav>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="alert" id="alert" role="alertdialog" aria-modal="true" aria-labelledby="alert-title" hidden>
+  <div class="baby big cry" aria-hidden="true"></div>
+  <h3 id="alert-title"></h3>
+  <p id="alert-text"></p>
+  <button class="btn full" data-alert="go">Approve now</button>
+  <button class="btn plain full" data-alert="later">Later</button>
+</div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Edit post" hidden></div>
+<div class="busy" id="busy" hidden><div><span class="baby cry"></span><span id="busy-text"></span></div></div>
+<div class="writing" id="writing" role="status" hidden><span class="baby cry"></span><span id="writing-text"></span></div>
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

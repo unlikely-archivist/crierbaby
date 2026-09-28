@@ -1,0 +1,26 @@
+name = "crierbaby"
+main = "worker/index.js"
+compatibility_date = "2026-09-01"
+
+# The app (app/) is static; the worker runs first so every page gets the security headers.
+[assets]
+directory = "./app"
+binding = "ASSETS"
+run_worker_first = true
+
+# Every 15 minutes: post the day's approved post once its time comes; top up drafts each morning.
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Deploy id, sent with every API reply so an open app can tell it's out of date and reload.
+[version_metadata]
+binding = "CF_VERSION_METADATA"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "crierbaby"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"

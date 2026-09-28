@@ -1,0 +1,12 @@
+{
+  "name": "crierbaby",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A self-hosted, approval-first Bluesky photo scheduler with AI-assisted captions",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "dev": "npx wrangler dev",
+    "deploy": "npx wrangler deploy"
+  }
+}
