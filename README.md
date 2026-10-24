@@ -70,6 +70,26 @@ crierbaby is designed for one Bluesky account per deployment. It does not ship w
 
 Auto-posting remains paused until it is enabled from Settings.
 
+## Run a second copy for demos
+
+`wrangler.toml` includes a `demo` environment: a separate Worker (`crierbaby-demo`) with its own database, storage, secrets, and Bluesky account, so demoing never touches the main deployment. Use a throwaway Bluesky account for it.
+
+```sh
+npx wrangler d1 create crierbaby-demo
+npx wrangler kv namespace create KV --env demo
+```
+
+Put the returned IDs in the `[env.demo]` section of `wrangler.toml`, then:
+
+```sh
+npx wrangler d1 execute crierbaby-demo --remote --file=schema.sql --env demo
+npx wrangler secret put POSTER_PIN --env demo
+npx wrangler secret put BLUESKY_HANDLE --env demo
+npx wrangler secret put BLUESKY_APP_PASSWORD --env demo
+npx wrangler secret put AI_API_KEY --env demo
+npm run deploy:demo
+```
+
 ## Local development
 
 Initialize a local D1 database, provide local development secrets through Wrangler’s ignored local-secret mechanism, and run:
